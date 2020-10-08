@@ -14,22 +14,29 @@
  * limitations under the License.
  */
 
-syntax = "proto3";
+syntax = 'proto3';
 
-import "grpc_generator_template/Foo.proto";
 import "google/protobuf/empty.proto";
+import "grpc_common/common.proto";
 
 option java_multiple_files = true;
-option java_package = "com.exactpro.th2.generator.grpc";
+option java_package = "com.exactpro.th2.sim.grpc";
 
-service BarService {
-  rpc BarRequest(Bar) returns (Bar) {
-  }
-
-  rpc EmptyRequest(Bar) returns (google.protobuf.Empty) {
-  }
+message RuleID {
+  int32 id = 1;
 }
 
-message Bar {
-  Foo foo = 1;
+message RuleInfo {
+  RuleID id = 1;
+  string class_name = 2;
+  ConnectionID connection_id = 3;
+}
+
+message RulesInfo {
+  repeated RuleInfo info = 1;
+}
+
+service ServiceSimulator {
+  rpc removeRule(RuleID) returns (google.protobuf.Empty) {}
+  rpc getRulesInfo(google.protobuf.Empty) returns (RulesInfo) {}
 }
