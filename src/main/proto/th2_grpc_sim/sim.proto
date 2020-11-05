@@ -36,7 +36,7 @@ message RulesInfo {
   repeated RuleInfo info = 1;
 }
 
-service ServiceSimulator {
+service Sim {
   rpc removeRule(RuleID) returns (google.protobuf.Empty) {}
   rpc getRulesInfo(google.protobuf.Empty) returns (RulesInfo) {}
 }
