@@ -1,13 +1,15 @@
 # th2 gRPC sim library
 
-This library contains proto messages and `Sim` service with RPC methods that are used in [th2 sim](https://github.com/th2-net/th2-sim "th2-sim"). See [sim.proto](https://github.com/th2-net/th2-grpc-sim/blob/master/src/main/proto/th2_grpc_sim/sim.proto "sim.proto") file for details. <br>
+This library contains proto messages and `Sim` service with RPC methods that are used in [th2 sim](https://github.com/th2-net/th2-sim "th2-sim"). See [sim.proto](src/main/proto/th2_grpc_sim/sim.proto "sim.proto") file for details. <br>
 Tool generates code from `.proto` files and uploads built packages (`.proto` files and generated code) to specified repositories.
 
-## How to maintain project:
+## How to maintain project
 1. Make your changes.
 2. Up version of Java package in `gradle.properties` file.
 3. Up version of Python package in `package_info.json` file.
 4. Commit everything.
+
+## How to run project
 
 ### Java
 If you wish to manually create and publish package for Java, run these command:
