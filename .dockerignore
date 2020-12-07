@@ -3,7 +3,7 @@
 .git
 
 .gradle
-gradle*
+
 build
 
 __pycache__

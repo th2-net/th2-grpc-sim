@@ -107,7 +107,11 @@ serviceGeneration {
         outDir = "src/gen/main/services"
     }
 }
-
+tasks.withType(PublishToMavenRepository) {
+    onlyIf {
+        (publication == publishing.publications.mavenJava)
+    }
+}
 publishing {
     publications {
         mavenJava(MavenPublication) {
