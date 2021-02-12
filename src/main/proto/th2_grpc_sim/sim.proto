@@ -46,7 +46,7 @@ service Sim {
   rpc getRulesInfo(google.protobuf.Empty) returns (RulesInfo) {}
   /*
     Calling 'touch' method on a rule that can send messages.
-    You can set your own arguments for the request
+    You can set your own arguments for this request
    */
   rpc touchRule(TouchRequest) returns (google.protobuf.Empty) {}
 }
