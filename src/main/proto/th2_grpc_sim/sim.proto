@@ -39,4 +39,5 @@ message RulesInfo {
 service Sim {
   rpc removeRule(RuleID) returns (google.protobuf.Empty) {}
   rpc getRulesInfo(google.protobuf.Empty) returns (RulesInfo) {}
+  rpc callInternalSignal(RuleID) returns (google.protobuf.Empty) {}
 }
