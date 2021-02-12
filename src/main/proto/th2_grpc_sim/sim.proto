@@ -36,7 +36,17 @@ message RulesInfo {
   repeated RuleInfo info = 1;
 }
 
+message TouchRequest {
+  RuleID id = 1;
+  map<string, string> args = 2;
+}
+
 service Sim {
   rpc removeRule(RuleID) returns (google.protobuf.Empty) {}
   rpc getRulesInfo(google.protobuf.Empty) returns (RulesInfo) {}
+  /*
+    Calling 'touch' method on a rule that can send messages.
+    You can set your own arguments for this request
+   */
+  rpc touchRule(TouchRequest) returns (google.protobuf.Empty) {}
 }
