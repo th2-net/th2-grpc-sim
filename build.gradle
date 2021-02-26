@@ -10,7 +10,6 @@ buildscript {
 
     dependencies {
         classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.13"
-        classpath "com.exactpro.th2:grpc-service-generator:2.0.5"
     }
 }
 
@@ -21,7 +20,6 @@ plugins {
 apply plugin: "java"
 apply plugin: "java-library"
 apply plugin: "com.google.protobuf"
-apply plugin: "com.exactpro.th2.service-generator"
 apply plugin: "maven-publish"
 apply plugin: 'com.jfrog.bintray'
 
@@ -32,8 +30,9 @@ sourceCompatibility = 11
 targetCompatibility = 11
 
 ext {
-    grpcVersion         = '1.32.1'
-    protobufVersion     = '3.13.0'
+    grpcVersion                 = '1.32.1'
+    protobufVersion             = '3.13.0'
+    serviceGeneratorVersion     = '3.1.5'
 
     genDir              = file("${project.rootDir}/src/gen")
     sharedDir           = file("${project.rootDir}/shared")
@@ -54,10 +53,9 @@ repositories {
 }
 
 dependencies {
-    api platform('com.exactpro.th2:bom:2.3.+')
+    api platform('com.exactpro.th2:bom:2.10.1')
 
-    implementation "com.exactpro.th2:grpc-common"
-
+    api "com.exactpro.th2:grpc-common:3.0.1"
     api "com.google.protobuf:protobuf-java-util"
     api "io.grpc:grpc-stub"
     implementation "io.grpc:grpc-protobuf"
@@ -66,7 +64,7 @@ dependencies {
 
     implementation "javax.annotation:javax.annotation-api:1.3.2"
 
-    implementation "com.exactpro.th2:grpc-service-generator:2.0.5"
+    implementation "com.exactpro.th2:grpc-service-generator:${serviceGeneratorVersion}"
 }
 
 sourceSets {
@@ -75,7 +73,10 @@ sourceSets {
             srcDirs 'src/main/proto'
         }
         java {
-            srcDirs 'src/gen/main/java', 'src/gen/main/grpc', 'src/gen/main/services'
+            srcDirs 'src/gen/main/java', 'src/gen/main/grpc', 'src/gen/main/services/java/src'
+        }
+        resources {
+            srcDirs 'src/gen/main/services/java/resources'
         }
     }
 }
@@ -88,26 +89,33 @@ protobuf {
         grpc {
             artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
         }
+        services {
+            artifact = "com.exactpro.th2:grpc-service-generator:${serviceGeneratorVersion}:all@jar"
+        }
     }
     generateProtoTasks.generatedFilesBaseDir = genDir
     generateProtoTasks {
         all()*.plugins {
             grpc {}
+            services {
+                option 'javaInterfacesPath=./java/src'
+                option 'javaInterfacesImplPath=./java/src'
+                option 'javaMetaInfPath=./java/resources'
+                option 'pythonPath=./python'
+            }
         }
         ofSourceSet('main')
     }
 }
 
-generateServices.dependsOn.add('generateProto')
-compileJava.dependsOn.add('generateServices')
+compileJava.dependsOn.add('generateProto')
 
-serviceGeneration {
-    settings {
-        protoDir = "src/main/proto"
-        outDir = "src/gen/main/services"
+// prevent publish to Bintray from gitlab
+tasks.withType(PublishToMavenRepository) {
+    onlyIf {
+        (publication == publishing.publications.mavenJava)
     }
 }
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -125,10 +133,20 @@ publishing {
             }
         }
     }
+
     repositories {
         maven {
-            name = "localRepo"
+            name = 'localRepo'
             url = sharedDir
+        }
+//Nexus repo for publish from gitlab
+        maven {
+            name = 'nexusRepository'
+            credentials {
+                username = "${nexus_user}"
+                password = "${nexus_password}"
+            }
+            url = "${nexus_url}"
         }
     }
 }
@@ -136,18 +154,18 @@ publishing {
 bintray {
     user = "${bintray_user}"
     key = "${bintray_key}"
-   	publications = ['bintrayPublication']
+    publications = ['bintrayPublication']
     pkg {
         repo = 'th2'
         name = rootProject.name
         userOrg = 'exactpro'
         licenses = ['Apache-2.0']
         vcsUrl = "${vcs_url}"
-   		version {
-			name = project.version
-			desc = project.version
-			released  = new Date()
-		}
+        version {
+            name = project.version
+            desc = project.version
+            released = new Date()
+        }
     }
     publish = true
 }
