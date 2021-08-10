@@ -38,5 +38,8 @@ If you wish to manually create and publish package for Python:
 
 ## Release notes
 
+### 3.1.3
++ Update setup.py
+
 ### 3.1.2
 + Update libraries versions.
