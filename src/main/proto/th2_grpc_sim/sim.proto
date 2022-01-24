@@ -26,10 +26,15 @@ message RuleID {
   int32 id = 1;
 }
 
+message RuleRelation {
+  string relation = 1;
+}
+
 message RuleInfo {
   RuleID id = 1;
   string class_name = 2;
-  ConnectionID connection_id = 3;
+  string alias = 3;
+  RuleRelation relation = 4;
 }
 
 message RulesInfo {
@@ -44,6 +49,7 @@ message TouchRequest {
 service Sim {
   rpc removeRule(RuleID) returns (google.protobuf.Empty) {}
   rpc getRulesInfo(google.protobuf.Empty) returns (RulesInfo) {}
+  rpc getRelatedRules(RuleRelation) returns (RulesInfo) {}
   /*
     Calling 'touch' method on a rule that can send messages.
     You can set your own arguments for this request
