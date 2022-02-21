@@ -38,6 +38,10 @@ If you wish to manually create and publish package for Python:
 
 ## Release notes
 
+### 4.0.0 
++ New param relation
++ Added new method 'getRelatedRules'
+
 ### 3.1.3
 + Update setup.py
 
