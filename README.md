@@ -38,6 +38,10 @@ If you wish to manually create and publish package for Python:
 
 ## Release notes
 
+### 4.1.0
++ Add stubs for Python
++ Add proper dependency range for Python
+
 ### 4.0.0 
 + New param relation
 + Added new method 'getRelatedRules'
