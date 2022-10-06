@@ -31,8 +31,8 @@ message RuleID {
   To configure this param please setup it on rule creation phase.
   Related rules sends and receives messages only from pins with same value in attributes.
  */
-message RuleMessageFlow {
-  string messageFlow = 1;
+message MessageFlow {
+  string flow = 1;
 }
 
 /*
@@ -45,7 +45,7 @@ message RuleInfo {
   RuleID id = 1;
   string class_name = 2;
   string alias = 3;
-  RuleMessageFlow messageFlow = 4;
+  MessageFlow messageFlow = 4;
 }
 
 message RulesInfo {
@@ -63,7 +63,7 @@ service Sim {
   /*
     getRelatedRules method will return all rules configured with the given message-flow attribute
    */
-  rpc getRelatedRules(RuleMessageFlow) returns (RulesInfo) {}
+  rpc getRelatedRules(MessageFlow) returns (RulesInfo) {}
   /*
     Calling 'touch' method on a rule that can send messages.
     You can set your own arguments for this request
