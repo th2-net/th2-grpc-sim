@@ -38,6 +38,9 @@ If you wish to manually create and publish package for Python:
 
 ## Release notes
 
+### 3.1.4
++ Set dependency range for `th2-grpc-common` as `>=3,<4`
+
 ### 3.1.3
 + Update setup.py
 
