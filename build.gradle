@@ -14,7 +14,7 @@ sourceCompatibility = 11
 targetCompatibility = 11
 
 ext {
-    grpcVersion                 = '1.32.1'
+    grpcVersion                 = '1.50.2'
     protobufVersion             = '3.13.0'
     serviceGeneratorVersion     = '3.2.2'
 
@@ -40,9 +40,9 @@ repositories {
 }
 
 dependencies {
-    api platform('com.exactpro.th2:bom:3.1.0')
+    api platform('com.exactpro.th2:bom:4.1.0')
 
-    api "com.exactpro.th2:grpc-common:3.11.1"
+    api "com.exactpro.th2:grpc-common:3.13.0"
     api "com.google.protobuf:protobuf-java-util"
     api "io.grpc:grpc-stub"
     implementation "io.grpc:grpc-protobuf"

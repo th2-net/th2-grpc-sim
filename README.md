@@ -38,6 +38,10 @@ If you wish to manually create and publish package for Python:
 
 ## Release notes
 
+### 4.2.0
++ Update libraries versions.
++ Vulnerability check pipeline step.
+
 ### 4.1.0
 + Add stubs for Python
 + Update `th2-grpc-common` from `3.9.0` to `3.11.1`
