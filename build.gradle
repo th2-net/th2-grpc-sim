@@ -5,6 +5,7 @@ plugins {
     id "io.github.gradle-nexus.publish-plugin" version "1.0.0"
     id 'signing'
     id "com.google.protobuf" version "0.8.15"
+    id "org.owasp.dependencycheck" version "8.1.2"
 }
 
 group = 'com.exactpro.th2'
@@ -36,6 +37,17 @@ repositories {
     configurations.all {
         resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
         resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
+    }
+}
+
+dependencyCheck {
+    formats=['SARIF', 'JSON', 'HTML']
+    failBuildOnCVSS=5
+
+    analyzers {
+        assemblyEnabled = false
+        nugetconfEnabled = false
+        nodeEnabled = false
     }
 }
 
