@@ -5,6 +5,7 @@ plugins {
     id "io.github.gradle-nexus.publish-plugin" version "1.0.0"
     id 'signing'
     id "com.google.protobuf" version "0.8.15"
+    id "org.owasp.dependencycheck" version "8.1.2"
 }
 
 group = 'com.exactpro.th2'
@@ -14,9 +15,9 @@ sourceCompatibility = 11
 targetCompatibility = 11
 
 ext {
-    grpcVersion                 = '1.32.1'
-    protobufVersion             = '3.13.0'
-    serviceGeneratorVersion     = '3.2.2'
+    grpcVersion                 = '1.48.2'
+    protobufVersion             = '3.21.7'
+    serviceGeneratorVersion     = '3.3.1'
 
     genDir              = file("${project.rootDir}/src/gen")
     sharedDir           = file("${project.rootDir}/shared")
@@ -39,10 +40,21 @@ repositories {
     }
 }
 
-dependencies {
-    api platform('com.exactpro.th2:bom:3.1.0')
+dependencyCheck {
+    formats=['SARIF', 'JSON', 'HTML']
+    failBuildOnCVSS=5
 
-    api "com.exactpro.th2:grpc-common:3.11.1"
+    analyzers {
+        assemblyEnabled = false
+        nugetconfEnabled = false
+        nodeEnabled = false
+    }
+}
+
+dependencies {
+    api platform('com.exactpro.th2:bom:4.1.0')
+
+    api "com.exactpro.th2:grpc-common:3.13.0"
     api "com.google.protobuf:protobuf-java-util"
     api "io.grpc:grpc-stub"
     implementation "io.grpc:grpc-protobuf"
@@ -196,4 +208,10 @@ signing {
 clean {
     delete genDir
     delete sharedDir
+}
+
+configurations {
+    compileClasspath {
+        resolutionStrategy.activateDependencyLocking()
+    }
 }
