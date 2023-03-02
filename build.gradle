@@ -14,9 +14,9 @@ sourceCompatibility = 11
 targetCompatibility = 11
 
 ext {
-    grpcVersion                 = '1.50.2'
-    protobufVersion             = '3.13.0'
-    serviceGeneratorVersion     = '3.2.2'
+    grpcVersion                 = '1.48.2'
+    protobufVersion             = '3.21.7'
+    serviceGeneratorVersion     = '3.3.1'
 
     genDir              = file("${project.rootDir}/src/gen")
     sharedDir           = file("${project.rootDir}/shared")
