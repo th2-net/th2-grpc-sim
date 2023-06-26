@@ -51,7 +51,6 @@ sourceSets {
 dependencies {
     api platform('com.exactpro.th2:bom:4.3.0')
 
-    api "com.exactpro.th2:grpc-common:4.2.0-dev"
     api "com.google.protobuf:protobuf-java-util"
     api "io.grpc:grpc-stub"
     implementation "io.grpc:grpc-protobuf"
