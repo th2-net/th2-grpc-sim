@@ -4,7 +4,7 @@ plugins {
     id 'maven-publish'
     id "io.github.gradle-nexus.publish-plugin" version "1.0.0"
     id 'signing'
-    id "com.google.protobuf" version "0.8.15"
+    id "com.google.protobuf" version "0.9.3"
 }
 
 group = 'com.exactpro.th2'
@@ -15,11 +15,10 @@ targetCompatibility = 11
 
 ext {
     grpcVersion                 = '1.50.2'
-    protobufVersion             = '3.13.0'
-    serviceGeneratorVersion     = '3.2.2'
-
-    genDir              = file("${project.rootDir}/src/gen")
+    protobufVersion             = '3.23.2'
+    serviceGeneratorVersion     = '3.3.1'
     sharedDir           = file("${project.rootDir}/shared")
+    genBaseDir = file("${buildDir}/generated/source/proto") // from protobuf plugin
 }
 
 repositories {
@@ -33,16 +32,25 @@ repositories {
             url 'https://s01.oss.sonatype.org/content/repositories/releases/'
     }
 
-    configurations.all {
+    configurations.configureEach {
         resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
         resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
     }
 }
 
-dependencies {
-    api platform('com.exactpro.th2:bom:4.1.0')
+sourceSets {
+    main {
+        // the proto plugins add generated dir to source sets
+        resources {
+            srcDirs "$genBaseDir/main/services/java/resources"
+        }
+    }
+}
 
-    api "com.exactpro.th2:grpc-common:4.1.0-dev-version-4+"
+dependencies {
+    api platform('com.exactpro.th2:bom:4.2.0')
+
+    api "com.exactpro.th2:grpc-common:4.2.0-dev"
     api "com.google.protobuf:protobuf-java-util"
     api "io.grpc:grpc-stub"
     implementation "io.grpc:grpc-protobuf"
@@ -54,18 +62,9 @@ dependencies {
     api "com.exactpro.th2:grpc-service-generator:${serviceGeneratorVersion}"
 }
 
-sourceSets {
-    main {
-        proto {
-            srcDirs 'src/main/proto'
-        }
-        java {
-            srcDirs 'src/gen/main/java', 'src/gen/main/grpc', 'src/gen/main/services/java/src'
-        }
-        resources {
-            srcDirs 'src/gen/main/services/java/resources'
-        }
-    }
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 protobuf {
@@ -80,7 +79,6 @@ protobuf {
             artifact = "com.exactpro.th2:grpc-service-generator:${serviceGeneratorVersion}:all@jar"
         }
     }
-    generateProtoTasks.generatedFilesBaseDir = genDir
     generateProtoTasks {
         all()*.plugins {
             grpc {}
@@ -96,33 +94,31 @@ protobuf {
 }
 
 compileJava.dependsOn.add('generateProto')
-
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
+processResources.dependsOn('generateProto')
+sourcesJar.dependsOn('generateProto')
 
 // conditionals for publications
-tasks.withType(PublishToMavenRepository) {
+tasks.withType(PublishToMavenRepository).configureEach {
     onlyIf {
         (repository == publishing.repositories.nexusRepository &&
-            project.hasProperty('nexus_user') &&
-            project.hasProperty('nexus_password') &&
-            project.hasProperty('nexus_url')) ||
-        (repository == publishing.repositories.sonatype &&
-            project.hasProperty('sonatypeUsername') &&
-            project.hasProperty('sonatypePassword')) ||
-        (repository == publishing.repositories.localRepo)
+                project.hasProperty('nexus_user') &&
+                project.hasProperty('nexus_password') &&
+                project.hasProperty('nexus_url')) ||
+                (repository == publishing.repositories.sonatype &&
+                        project.hasProperty('sonatypeUsername') &&
+                        project.hasProperty('sonatypePassword')) ||
+                (repository == publishing.repositories.localRepo)
     }
 }
-tasks.withType(Sign) {
-    onlyIf { project.hasProperty('signingKey') &&
-        project.hasProperty('signingPassword')
+tasks.withType(Sign).configureEach {
+    onlyIf {
+        project.hasProperty('signingKey') &&
+                project.hasProperty('signingPassword')
     }
 }
 // disable running task 'initializeSonatypeStagingRepository' on a gitlab
-tasks.whenTaskAdded {task ->
-    if(task.name.equals('initializeSonatypeStagingRepository') &&
+tasks.configureEach { task ->
+    if(task.name == 'initializeSonatypeStagingRepository' &&
         !(project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword'))
     ) {
         task.enabled = false
@@ -191,11 +187,6 @@ signing {
     def signingPassword = findProperty("signingPassword")
     useInMemoryPgpKeys(signingKey, signingPassword)
     sign publishing.publications.mavenJava
-}
-
-clean {
-    delete genDir
-    delete sharedDir
 }
 
 configurations {
