@@ -6,6 +6,7 @@ plugins {
     id 'signing'
     id "com.google.protobuf" version "0.9.3"
     id "org.owasp.dependencycheck" version "8.2.1"
+    id "com.gorylenko.gradle-git-properties" version "2.4.1"
 }
 
 group = 'com.exactpro.th2'
@@ -15,10 +16,10 @@ sourceCompatibility = 11
 targetCompatibility = 11
 
 ext {
-    grpcVersion                 = '1.50.2'
-    protobufVersion             = '3.23.2'
-    serviceGeneratorVersion     = '3.3.1'
-    sharedDir           = file("${project.rootDir}/shared")
+    grpcVersion = '1.56.0'
+    protobufVersion = '3.23.2' // The protoc:3.23.3 https://github.com/protocolbuffers/protobuf/issues/13070
+    serviceGeneratorVersion = '3.4.0-TH2-4887-vulnerabilities-5346040251-1bed6cd-SNAPSHOT'
+
     genBaseDir = file("${buildDir}/generated/source/proto") // from protobuf plugin
 }
 
@@ -49,7 +50,7 @@ sourceSets {
 }
 
 dependencies {
-    api platform('com.exactpro.th2:bom:4.3.0')
+    api platform('com.exactpro.th2:bom:4.4.0')
 
     api "com.google.protobuf:protobuf-java-util"
     api "io.grpc:grpc-stub"
@@ -106,8 +107,7 @@ tasks.withType(PublishToMavenRepository).configureEach {
                 project.hasProperty('nexus_url')) ||
                 (repository == publishing.repositories.sonatype &&
                         project.hasProperty('sonatypeUsername') &&
-                        project.hasProperty('sonatypePassword')) ||
-                (repository == publishing.repositories.localRepo)
+                        project.hasProperty('sonatypePassword'))
     }
 }
 tasks.withType(Sign).configureEach {
@@ -157,11 +157,7 @@ publishing {
         }
     }
     repositories {
-        maven {
-            name = 'localRepo'
-            url = sharedDir
-        }
-//Nexus repo to publish from gitlab
+        //Nexus repo to publish from gitlab
         maven {
             name = 'nexusRepository'
             credentials {
@@ -183,8 +179,8 @@ nexusPublishing {
 }
 
 signing {
-    def signingKey = findProperty("signingKey")
-    def signingPassword = findProperty("signingPassword")
+    String signingKey = findProperty("signingKey")
+    String signingPassword = findProperty("signingPassword")
     useInMemoryPgpKeys(signingKey, signingPassword)
     sign publishing.publications.mavenJava
 }
