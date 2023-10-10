@@ -40,9 +40,8 @@ If you wish to manually create and publish package for Python:
 
 ### 5.1.0
 
-+ Update to `th2-bom` version `4.4.0`
++ Update to `th2-bom` version `4.5.0`
 + Update to `th2-grpc-service-genrator` version `3.4.0`
-+ Update to `grpcio-tools` version `1.56.0`
 + Update to `mypy-protobuf` version `3.4`
 
 ### 4.2.0
