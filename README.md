@@ -38,6 +38,11 @@ If you wish to manually create and publish package for Python:
 
 ## Release notes
 
+### 5.2.0
+
+Updated:
+* th2 gradle plugin: 0.3.4 (bom: 4.13.1)
+
 ### 5.1.0
 
 + Update to `th2-bom` version `4.5.0`
