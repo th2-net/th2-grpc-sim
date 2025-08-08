@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    uses: th2-net/.github/.github/workflows/compound-grpc.yml@grpc-publication # FIXME: change to `main` after check
+    uses: th2-net/.github/.github/workflows/compound-grpc.yml@main
     with:
       build-mode: dev-release
     secrets:
