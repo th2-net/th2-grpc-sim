@@ -38,7 +38,26 @@ If you wish to manually create and publish package for Python:
 
 ## Release notes
 
+### 5.2.0
+
+Updated:
+* th2 gradle plugin: 0.3.4 (bom: 4.13.1)
+* mypy-protobuf ~= `3.6`
+* grpcio-tools ~= `1.74.0`
+
+### 5.1.0
+
++ Update to `th2-bom` version `4.5.0`
++ Update to `th2-grpc-service-genrator` version `3.4.0`
++ Update to `mypy-protobuf` version `3.4`
+
+### 4.2.0
+
++ Update libraries versions.
++ Vulnerability check pipeline step.
+
 ### 4.1.0
+
 + Add stubs for Python
 + Update `th2-grpc-common` from `3.9.0` to `3.11.1`
 + Update `th2-grpc-service-generator` from `3.1.12` to `3.2.2`
