@@ -107,7 +107,7 @@ setup(
     python_requires='>=3.7',
     install_requires=[
         'mypy-protobuf~=3.6',
-        'grpcio-tools~=1.74.0'
+        'grpcio-tools>=1.74,<1.76'
     ],
     packages=packages,
     package_data=package_data,
