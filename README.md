@@ -42,7 +42,6 @@ If you wish to manually create and publish package for Python:
 + Migrated to range python dependencies
 + Updated:
   + th2 gradle plugin: `0.3.8` (bom: `4.14.1`)
-  + th2-grpc-common: `4.7.1`
 
 ### 5.2.0
 
