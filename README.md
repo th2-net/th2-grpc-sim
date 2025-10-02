@@ -1,4 +1,4 @@
-# th2 gRPC sim library
+# th2 gRPC sim library (5.2.1)
 
 This library contains proto messages and `Sim` service with RPC methods that are used in [th2 sim](https://github.com/th2-net/th2-sim "th2-sim"). See [sim.proto](src/main/proto/th2_grpc_sim/sim.proto "sim.proto") file for details. <br>
 Tool generates code from `.proto` files and uploads built packages (`.proto` files and generated code) to specified repositories.
@@ -37,6 +37,12 @@ If you wish to manually create and publish package for Python:
    `PYPI_REPOSITORY_URL`, `PYPI_USER` and `PYPI_PASSWORD` are parameters for publishing.
 
 ## Release notes
+
+### 5.2.1
++ Migrated to range python dependencies
++ Updated:
+  + th2 gradle plugin: `0.3.8` (bom: `4.14.1`)
+  + th2-grpc-common: `4.7.1`
 
 ### 5.2.0
 
