@@ -42,7 +42,7 @@ If you wish to manually create and publish package for Python:
 + Migrated to range python dependencies
 + Updated:
   + th2 gradle plugin: `0.3.8` (bom: `4.14.1`)
-
+  + grpcio-tools: `1.75.1`
 ### 5.2.0
 
 Updated:
