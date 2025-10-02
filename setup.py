@@ -106,8 +106,8 @@ setup(
     license='Apache License 2.0',
     python_requires='>=3.7',
     install_requires=[
-        'mypy-protobuf~=3.6',
-        'grpcio-tools>=1.74,<1.76'
+        'mypy-protobuf>=3.6,<4',
+        'grpcio-tools>=1.75.1,<2'
     ],
     packages=packages,
     package_data=package_data,
