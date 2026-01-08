@@ -1,5 +1,5 @@
 [versions]
-th2 = "0.3.11"
+th2 = "0.3.13"
 
 [plugins]
 th2-publish = { id = "com.exactpro.th2.gradle.publish", version.ref = "th2" }
